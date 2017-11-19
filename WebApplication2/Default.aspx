@@ -2,41 +2,63 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-    <div class="jumbotron">
-        <h1>ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-        <p><a href="http://www.asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-    </div>
+    <body style="background-image:url('http://www.gettyimages.com/license/625756386')">
+<div class="row" style=" padding:20px">
+    <div class="col-md-4" style="padding: 10px">
+        <h2>Simulate for Free</h2>
+        <p>
+            Start with virtual cash and put your trading skills to the test! Compete as often as you would like, and see how you compare to the real market.
+        </p>
 
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Getting started</h2>
-            <p>
-                ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-            A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
-            </p>
-            <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Get more libraries</h2>
-            <p>
-                NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
-            </p>
-            <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Web Hosting</h2>
-            <p>
-                You can easily find a web hosting company that offers the right mix of features and price for your applications.
-            </p>
-            <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
-            </p>
-        </div>
     </div>
+    <div class="col-md-4" style="padding: 10px">
+        <h2>A Stepping Stone to the Real Market</h2>
+        <p>
+            This is the ideal way for you to get experience with the stock market. Submit your trades in a virtual envirnment before risking your own capital.
+        </p>
+
+    </div>
+    <div class="col-md-4" style="padding: 10px">
+        <h2>Live and Up-to-Date Data</h2>
+        <p>
+            Get the most current information on the market to make the most educated decisions utilizing a variety of live tools.
+        </p>
+
+    </div>
+</div>
+
+    <div class="jumbotron">
+
+        <!-- TradingView Widget BEGIN -->
+        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+        <script type="text/javascript">
+            new TradingView.widget({
+                "width": 980,
+                "height": 610,
+                "symbol": "NASDAQ:AAPL",
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "Light",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "withdateranges": true,
+                "allow_symbol_change": true,
+                "details": true,
+                "hotlist": true,
+                "calendar": true,
+                "news": [
+                    "stocktwits",
+                    "headlines"
+                ],
+                "hideideas": true
+            });
+        </script>
+        <!-- TradingView Widget END -->
+
+    </div>
+    
+</body>
 
 </asp:Content>
