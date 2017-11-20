@@ -2,7 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-    <body style="background-image:url('http://www.gettyimages.com/license/625756386')">
+   
 <div class="row" style=" padding:20px">
     <div class="col-md-4" style="padding: 10px">
         <h2>Simulate for Free</h2>
@@ -59,6 +59,6 @@
 
     </div>
     
-</body>
+
 
 </asp:Content>

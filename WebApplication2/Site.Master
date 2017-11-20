@@ -54,7 +54,7 @@
                         <li><a runat="server" href="~/">Home</a></li>
                         <li><a runat="server" href="~/About">About</a></li>
                         <li><a runat="server" href="~/Contact">Stock Info</a></li>
-                        <li><a runat="server" href="~/Simulate">SIMULATE NOW</a></li>
+                        <li><a runat="server" href="~/Simulate1">SIMULATE NOW</a></li>
                     </ul>
                 </div>
             </div>
