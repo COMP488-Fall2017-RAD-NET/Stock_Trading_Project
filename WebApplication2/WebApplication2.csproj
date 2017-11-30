@@ -210,6 +210,11 @@
     <Compile Include="About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
+    <Compile Include="App_Data\MySqlConnection.cs" />
+    <Compile Include="App_Data\Portfolio.cs" />
+    <Compile Include="App_Data\Stock.cs" />
+    <Compile Include="App_Data\Transaction.cs" />
+    <Compile Include="App_Data\User.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
@@ -259,7 +264,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
