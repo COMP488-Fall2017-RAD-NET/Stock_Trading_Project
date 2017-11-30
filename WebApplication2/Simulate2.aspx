@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Simulate2.aspx.cs" Inherits="WebApplication2.Simulate2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Simulate2.aspx.cs" Inherits="WebApplication2.Simulate2" EnableEventValidation="false"%>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div style="width:50%; float:left" >
@@ -8,12 +8,12 @@
     <div class="form-group">
         <div style=""padding-top: 10px; padding-bottom: 10px">
       <label>Type a ticker symbol to get a quote</label>
-      <input type="text" class="form-control" placeholder="Enter quote here" style ="padding:10px">
-      <button type="submit" class="btn btn-primary" >Submit</button>
+      <input id="ticker" runat="server" type="text" class="form-control" placeholder="Enter quote here" style ="padding:10px"/>
+      <asp:Button ID="getQuote" runat="server" Text="Submit" OnClick="GetQuote_Click" type="submit" class="btn btn-primary" CausesValidation="False"/>
             </div>
         <div style=""padding-top: 5px; padding-bottom: 5px">
         <label>Your quote</label>
-      <input type="text" class="form-control" readonly style ="padding:10px">
+      <input id="quote" runat="server" type="text" class="form-control" readonly style ="padding:10px">
             </div>
     </div>
 
