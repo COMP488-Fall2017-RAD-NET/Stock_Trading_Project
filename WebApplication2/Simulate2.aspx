@@ -20,14 +20,14 @@
       <div class="form-group">
           <div style=""padding-top: 10px; padding-bottom: 10px">
       <label>How many shares would you like?</label>
-      <input type="text" class="form-control" placeholder="Enter share quantity here" style ="padding:10px">
+      <input id="tradeAmount" runat="server" type="text" class="form-control" placeholder="Enter share quantity here" style ="padding:10px">
       <button type="submit" class="btn btn-primary" >Submit</button>
               </div>
           <div style=""padding-top: 5px; padding-bottom: 5px">
         <label>Total amount</label>
       <input type="text" class="form-control" readonly style ="padding:10px">
-      <button type="submit" class="btn btn-primary">Buy</button>
-      <button type="submit" class="btn btn-primary">Sell</button>
+      <asp:Button ID="buyButton" runat="server" Text="Buy" OnClick="Buy_Click" type="submit" class="btn btn-primary" CausesValidation="False"/>
+      <asp:Button ID="sellButton" runat="server" Text="Sell" OnClick="Sell_Click" type="submit" class="btn btn-primary" CausesValidation="False"/>
               </div>
     </div>
     

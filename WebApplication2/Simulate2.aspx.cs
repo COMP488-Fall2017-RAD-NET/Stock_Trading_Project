@@ -33,6 +33,8 @@ namespace WebApplication2
                 }
             }
             getQuote.Click += new EventHandler(this.GetQuote_Click);
+            buyButton.Click += new EventHandler(this.Buy_Click);
+            buyButton.Click += new EventHandler(this.Sell_Click);
         }
 
         protected void GetQuote_Click(object sender, EventArgs e)
@@ -45,23 +47,15 @@ namespace WebApplication2
             if (price != 0.0)
             {
                 quote.Value = price.ToString();
-                /*quotes.Controls.Add(new Literal()
-                {
-                    Text = "<p> Current price of " + ticker.Value + ": $" + price + "</p>"
-                }
-                );*/
                 //UpdateChart(ticker.Value);
             }
             else
             {
                 Response.Write("<script>alert(\'" + ticker.Value + " ticker symbol not found\')</script>");
             }
-
-            //TestConnection();
-
         }
 
-        /*protected void BuySell_Click(object sender, EventArgs e)
+        protected void Buy_Click(object sender, EventArgs e)
         {
             // retrieve references from current session
             currentStock = (Stock)Session["currentStock"];
@@ -78,41 +72,20 @@ namespace WebApplication2
             {
                 Response.Write("<script>alert(\'Please enter quantity\')</script>");
             }
-            else if (!(RadioButtonList.Items[0].Selected || RadioButtonList.Items[1].Selected))
-            {
-                Response.Write("<script>alert(\'Please select an option (buy / sell)\')</script>");
-            }
             else
             {
                 // validate transation
-                String type = RadioButtonList.Items[0].Selected ? "BUY" : "SELL";
+                String type = "BUY";
                 int transactionAmount = Convert.ToInt32(tradeAmount.Value);
-                int userAmount;
                 bool canSave = false;
-                switch (type)
-                {
-                    case "BUY":
-                        if (currentPortfolio.money - currentStock.currentPrice * transactionAmount > 0)
-                        {
-                            canSave = true;
-                        }
-                        else
-                        {
-                            Response.Write("<script>alert(\'Insufficient money.\')</script>");
-                        }
-                        break;
-                    case "SELL":
-                        currentPortfolio.stocks.TryGetValue(ticker.Value, out userAmount);
-                        if (userAmount - transactionAmount > 0)
-                        {
-                            canSave = true;
-                        }
-                        else
-                        {
-                            Response.Write("<script>alert(\'Insufficient stock.\')</script>");
-                        }
 
-                        break;
+                if (currentPortfolio.money - currentStock.currentPrice * transactionAmount > 0)
+                {
+                    canSave = true;
+                }
+                else
+                {
+                    Response.Write("<script>alert(\'Insufficient money.\')</script>");
                 }
 
                 // store transaction
@@ -130,7 +103,59 @@ namespace WebApplication2
                     }
                 }
             }
-        }*/
+        }
+
+        protected void Sell_Click(object sender, EventArgs e)
+        {
+            // retrieve references from current session
+            currentStock = (Stock)Session["currentStock"];
+            currentUser = (User)Session["currentUser"];
+            currentPortfolio = (Portfolio)Session["currentPortfolio"];
+            conn = (MySqlConnection)Session["conn"];
+
+            // error handling
+            if (currentStock == null || currentStock.currentPrice == 0.0)
+            {
+                Response.Write("<script>alert(\'Please get a quote first\')</script>");
+            }
+            else if (tradeAmount.Value == "")
+            {
+                Response.Write("<script>alert(\'Please enter quantity\')</script>");
+            }
+            else
+            {
+                // validate transation
+                String type = "SELL";
+                int transactionAmount = Convert.ToInt32(tradeAmount.Value);
+                int userAmount;
+                bool canSave = false;
+
+                currentPortfolio.stocks.TryGetValue(ticker.Value, out userAmount);
+                if (userAmount - transactionAmount > 0)
+                {
+                    canSave = true;
+                }
+                else
+                {
+                    Response.Write("<script>alert(\'Insufficient stock.\')</script>");
+                }
+
+                // store transaction
+                if (canSave)
+                {
+                    Transaction t = new Transaction(
+                    0, currentUser.id, currentStock.ticker, type, transactionAmount, currentStock.currentPrice);
+                    if (conn.InsertTransaction(t) == 1 && conn.UpdateUserPortfolio(t, currentPortfolio) >= 1)
+                    {
+                        Response.Write("<script>alert(\'Transaction successfully saved to the database.\')</script>");
+                    }
+                    else
+                    {
+                        Response.Write("<script>alert(\'Error. Please try again.\')</script>");
+                    }
+                }
+            }
+        }
 
         // establish database connection
         private bool SetDatabaseConnection()
@@ -144,25 +169,6 @@ namespace WebApplication2
             else
             {
                 return false;
-            }
-        }
-
-        // testing
-        private void TestConnection()
-        {
-            MySqlConnection conn = new MySqlConnection();
-            if (conn.Connect())
-            {
-                List<Transaction> transactions = conn.SelectTransactions();
-                var myTransactions =
-                    from t in transactions
-                    where t.id == 1
-                    select t;
-
-                foreach (Transaction t in myTransactions)
-                {
-                    Response.Write(t.ToString());
-                }
             }
         }
 
