@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace WebApplication2
 {
-    public partial class WebForm1 : System.Web.UI.Page
+    public partial class Simulate3 : System.Web.UI.Page
     {
         //protected static WebBrowser webBrowser1;
         private Stock currentStock;
