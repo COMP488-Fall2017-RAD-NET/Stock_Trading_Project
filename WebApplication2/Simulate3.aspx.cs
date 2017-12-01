@@ -55,6 +55,13 @@ namespace WebApplication2
             }
         }
 
+        protected void SubmitAmount_Click(object sender, EventArgs e)
+        {
+            currentStock = (Stock)Session["currentStock"];
+            int transactionAmount = Convert.ToInt32(tradeAmount.Value);
+            amount.Value = (currentStock.currentPrice * transactionAmount).ToString();
+        }
+
         protected void Buy_Click(object sender, EventArgs e)
         {
             // retrieve references from current session
