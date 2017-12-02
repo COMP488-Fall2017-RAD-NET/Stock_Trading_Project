@@ -1,15 +1,14 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Simulate2.aspx.cs" Inherits="WebApplication2.Simulate2" EnableEventValidation="false"%>
-<%@ MasterType VirtualPath="~/Site.master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div style="width: 50%; float: left">
-        <form>
+        <!--<form>-->
             <fieldset>
                 <legend style="padding-top: 10px; padding-bottom: 10px">Let's trade some stocks!</legend>
                 <div class="form-group">
                     <div style="padding-top: 10px; padding-bottom: 10px">
                         <label>Type a ticker symbol to get a quote</label>
-                        <input id="ticker" runat="server" type="text" class="form-control" placeholder="Enter quote here" style="padding: 10px" />
+                        <input id="ticker" runat="server" type="text" class="form-control" placeholder="Enter ticker here" style="padding: 10px"/>
                         <asp:Button ID="getQuote" runat="server" Text="Submit" OnClick="GetQuote_Click" class="btn btn-primary" UseSubmitBehavior="false"/>
                     </div>
                     <div style="padding-top: 5px; padding-bottom: 5px">
@@ -32,7 +31,7 @@
                     </div>
                 </div>
             </fieldset>
-        </form>
+        <!--</form>-->
     </div>
 
     <div style="width: 50%; float: right">

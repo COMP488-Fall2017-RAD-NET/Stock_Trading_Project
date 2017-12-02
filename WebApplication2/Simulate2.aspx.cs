@@ -41,8 +41,6 @@ namespace WebApplication2
 
         protected void GetQuote_Click(object sender, EventArgs e)
         {
-            //this.Master.GetQuote_Click(sender, e);
-
             currentStock = new Stock(ticker.Value);
             Session["currentStock"] = currentStock;
             double price = currentStock.currentPrice;

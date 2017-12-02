@@ -21,8 +21,7 @@ public class Stock
     {
         // create url
         String url =
-            "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + ticker + "&interval=60min&outputsize=compact&apikey=22RO18Z8UHIGFQNM";
-
+            "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + ticker + "&interval=60min&outputsize=compact&apikey=38HEIOY4TO9U5D4S";
         // fetch JSON string
         // parse JSON and get last price
         using (var webClient = new System.Net.WebClient())
