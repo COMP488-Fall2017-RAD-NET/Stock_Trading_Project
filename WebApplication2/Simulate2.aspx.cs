@@ -19,7 +19,6 @@ namespace WebApplication2
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            String s = this.ClientScript.GetPostBackEventReference(this, "arg");
 
             if (!IsPostBack)
             {
@@ -38,13 +37,33 @@ namespace WebApplication2
             }
             else
             {
+                ticker.Value = (String) Session["tickerString"];
+                try
+                {
+                    quote.Value = Session["quote"].ToString();
+                }
+                catch { }
+                try
+                {
+                    tradeAmount.Value = Session["tradeAmount"].ToString();
+                }
+                catch { }
+               
                 string eventTarget = this.Request["__EVENTTARGET"];
                 string eventArgument = this.Request["__EVENTARGUMENT"];
 
                 if (eventTarget != String.Empty && eventTarget == "callPostBack")
                 {
                     if (eventArgument != String.Empty)
-                        Session["tickerString"] = eventArgument;
+                        try
+                        {
+                            int tradeAmount = Convert.ToInt32(eventArgument);
+                            Session["tradeAmount"] = tradeAmount;
+                        }
+                        catch (FormatException)
+                        {
+                            Session["tickerString"] = eventArgument;
+                        }
                 }
             }
 
@@ -56,6 +75,7 @@ namespace WebApplication2
             currentStock = new Stock(tickerString);
             Session["currentStock"] = currentStock;
             double price = currentStock.currentPrice;
+            Session["quote"] = price;
 
             // render quote and update chart
             if (price != 0.0)
@@ -72,7 +92,7 @@ namespace WebApplication2
         protected void SubmitAmount_Click(object sender, EventArgs e)
         {
             currentStock = (Stock)Session["currentStock"];
-            int transactionAmount = Convert.ToInt32(tradeAmount.Value);
+            int transactionAmount = (int) Session["tradeAmount"];
             amount.Value = (currentStock.currentPrice * transactionAmount).ToString();
         }
 
@@ -83,23 +103,23 @@ namespace WebApplication2
             currentUser = (User)Session["currentUser"];
             currentPortfolio = (Portfolio)Session["currentPortfolio"];
             conn = (MySqlConnection)Session["conn"];
+            int transactionAmount = (int)Session["tradeAmount"];
+            bool canSave = false;
+            String type = "BUY";
+
 
             // error handling
             if (currentStock == null || currentStock.currentPrice == 0.0)
             {
                 Response.Write("<script>alert(\'Please get a quote first\')</script>");
             }
-            else if (tradeAmount.Value == "")
+            else if (transactionAmount == 0)
             {
                 Response.Write("<script>alert(\'Please enter quantity\')</script>");
             }
             else
             {
                 // validate transation
-                String type = "BUY";
-                int transactionAmount = Convert.ToInt32(tradeAmount.Value);
-                bool canSave = false;
-
                 if (currentPortfolio.money - currentStock.currentPrice * transactionAmount > 0)
                 {
                     canSave = true;
@@ -107,6 +127,9 @@ namespace WebApplication2
                 else
                 {
                     Response.Write("<script>alert(\'Insufficient money.\')</script>");
+                    ticker.Value = "";
+                    quote.Value = "";
+                    tradeAmount.Value = "";
                 }
 
                 // store transaction
@@ -117,6 +140,9 @@ namespace WebApplication2
                     if (conn.InsertTransaction(t) == 1 && conn.UpdateUserPortfolio(t, currentPortfolio) >= 1)
                     {
                         Response.Write("<script>alert(\'Transaction successfully saved to the database.\')</script>");
+                        ticker.Value = "";
+                        quote.Value = "";
+                        tradeAmount.Value = "";
                     }
                     else
                     {
@@ -159,6 +185,9 @@ namespace WebApplication2
                 else
                 {
                     Response.Write("<script>alert(\'Insufficient stock.\')</script>");
+                    ticker.Value = "";
+                    quote.Value = "";
+                    tradeAmount.Value = "";
                 }
 
                 // store transaction
@@ -169,6 +198,9 @@ namespace WebApplication2
                     if (conn.InsertTransaction(t) == 1 && conn.UpdateUserPortfolio(t, currentPortfolio) >= 1)
                     {
                         Response.Write("<script>alert(\'Transaction successfully saved to the database.\')</script>");
+                        ticker.Value = "";
+                        quote.Value = "";
+                        tradeAmount.Value = "";
                     }
                     else
                     {
