@@ -41,9 +41,9 @@ namespace WebApplication2
 
         protected void GetQuote_Click(object sender, EventArgs e)
         {
-            this.Master.GetQuote_Click(sender, e);
+            //this.Master.GetQuote_Click(sender, e);
 
-            /*currentStock = new Stock(ticker.Value);
+            currentStock = new Stock(ticker.Value);
             Session["currentStock"] = currentStock;
             double price = currentStock.currentPrice;
 
@@ -56,7 +56,7 @@ namespace WebApplication2
             else
             {
                 Response.Write("<script>alert(\'" + ticker.Value + " ticker symbol not found\')</script>");
-            }*/
+            }
         }
 
         protected void SubmitAmount_Click(object sender, EventArgs e)

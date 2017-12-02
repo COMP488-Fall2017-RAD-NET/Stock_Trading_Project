@@ -10,7 +10,7 @@
                     <div style="padding-top: 10px; padding-bottom: 10px">
                         <label>Type a ticker symbol to get a quote</label>
                         <input id="ticker" runat="server" type="text" class="form-control" placeholder="Enter quote here" style="padding: 10px" />
-                        <asp:Button ID="getQuote" runat="server" Text="Submit" OnClick="GetQuote_Click" type="submit" class="btn btn-primary" OnClientClick="GetQuote_Click" CausesValidation="false" autopostback="false" />
+                        <asp:Button ID="getQuote" runat="server" Text="Submit" OnClick="GetQuote_Click" class="btn btn-primary" UseSubmitBehavior="false"/>
                     </div>
                     <div style="padding-top: 5px; padding-bottom: 5px">
                         <label>Your quote</label>
@@ -22,13 +22,13 @@
                     <div style="padding-top: 10px; padding-bottom: 10px">
                         <label>How many shares would you like?</label>
                         <input id="tradeAmount" runat="server" type="text" class="form-control" placeholder="Enter share quantity here" style="padding: 10px" />
-                        <asp:Button ID="submitAmount" runat="server" Text="Submit" OnClick="SubmitAmount_Click" type="submit" class="btn btn-primary" />
+                        <asp:Button ID="submitAmount" runat="server" Text="Submit" OnClick="SubmitAmount_Click" class="btn btn-primary" UseSubmitBehavior="false" />
                     </div>
                     <div style="padding-top: 5px; padding-bottom: 5px">
                         <label>Total amount</label>
                         <input id="amount" runat="server" type="text" class="form-control" readonly style="padding: 10px" />
-                        <asp:Button ID="buyButton" runat="server" Text="Buy" OnClick="Buy_Click" type="submit" class="btn btn-primary" />
-                        <asp:Button ID="sellButton" runat="server" Text="Sell" OnClick="Sell_Click" type="submit" class="btn btn-primary" />
+                        <asp:Button ID="buyButton" runat="server" Text="Buy" OnClick="Buy_Click" class="btn btn-primary" UseSubmitBehavior="false" />
+                        <asp:Button ID="sellButton" runat="server" Text="Sell" OnClick="Sell_Click" class="btn btn-primary" UseSubmitBehavior="false"/>
                     </div>
                 </div>
             </fieldset>
