@@ -155,13 +155,24 @@ public class MySqlConnection
                 break;
 
             case "SELL":
+                // update money
+                pMoney += t.amount * t.price;
+                sql = String.Format("update Portfolio set Amount = '{0}' where UserId = '{1}' and Ticker = 'MONEY'", pMoney, p.GetUserId());
+                command = new SqlCommand(sql, connection);
+                result += command.ExecuteNonQuery();
 
+                // update stock
+                pAmount -= t.amount;
+                if (!isNewStock)
+                {
+                    sql = String.Format("update Portfolio set Amount = '{0}' where UserId = '{1}' and Ticker = '{2}'",
+                        pAmount, p.GetUserId(), t.ticker);
+                    command = new SqlCommand(sql, connection);
+                    result += command.ExecuteNonQuery();
+                }
 
                 break;
         }
-
         return result;
     }
-
-
 }

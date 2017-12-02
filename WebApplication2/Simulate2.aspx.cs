@@ -159,6 +159,9 @@ namespace WebApplication2
             currentUser = (User)Session["currentUser"];
             currentPortfolio = (Portfolio)Session["currentPortfolio"];
             conn = (MySqlConnection)Session["conn"];
+            int transactionAmount = (int)Session["tradeAmount"];
+            bool canSave = false;
+            String type = "SELL";
 
             // error handling
             if (currentStock == null || currentStock.currentPrice == 0.0)
@@ -172,11 +175,7 @@ namespace WebApplication2
             else
             {
                 // validate transation
-                String type = "SELL";
-                int transactionAmount = Convert.ToInt32(tradeAmount.Value);
                 int userAmount;
-                bool canSave = false;
-
                 currentPortfolio.stocks.TryGetValue(tickerString, out userAmount);
                 if (userAmount - transactionAmount > 0)
                 {
