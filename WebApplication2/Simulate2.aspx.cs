@@ -15,9 +15,12 @@ namespace WebApplication2
         private User currentUser;
         private Portfolio currentPortfolio;
         private MySqlConnection conn;
+        private String tickerString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            String s = this.ClientScript.GetPostBackEventReference(this, "arg");
+
             if (!IsPostBack)
             {
                 if (!SetDatabaseConnection())
@@ -33,15 +36,24 @@ namespace WebApplication2
                     Session["currentPortfolio"] = currentPortfolio;
                 }
             }
+            else
+            {
+                string eventTarget = this.Request["__EVENTTARGET"];
+                string eventArgument = this.Request["__EVENTARGUMENT"];
 
-            getQuote.Click += new EventHandler(this.GetQuote_Click);
-            buyButton.Click += new EventHandler(this.Buy_Click);
-            buyButton.Click += new EventHandler(this.Sell_Click);
+                if (eventTarget != String.Empty && eventTarget == "callPostBack")
+                {
+                    if (eventArgument != String.Empty)
+                        Session["tickerString"] = eventArgument;
+                }
+            }
+
         }
 
         protected void GetQuote_Click(object sender, EventArgs e)
         {
-            currentStock = new Stock(ticker.Value);
+            tickerString = (String)Session["tickerString"];
+            currentStock = new Stock(tickerString);
             Session["currentStock"] = currentStock;
             double price = currentStock.currentPrice;
 
@@ -53,7 +65,7 @@ namespace WebApplication2
             }
             else
             {
-                Response.Write("<script>alert(\'" + ticker.Value + " ticker symbol not found\')</script>");
+                Response.Write("<script>alert(\'" + tickerString + " ticker symbol not found\')</script>");
             }
         }
 
@@ -139,7 +151,7 @@ namespace WebApplication2
                 int userAmount;
                 bool canSave = false;
 
-                currentPortfolio.stocks.TryGetValue(ticker.Value, out userAmount);
+                currentPortfolio.stocks.TryGetValue(tickerString, out userAmount);
                 if (userAmount - transactionAmount > 0)
                 {
                     canSave = true;
