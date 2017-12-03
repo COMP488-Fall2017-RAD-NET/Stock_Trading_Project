@@ -62,7 +62,7 @@ namespace WebApplication2
                         }
                         catch (FormatException)
                         {
-                            Session["tickerString"] = eventArgument;
+                            Session["tickerString"] = eventArgument.ToUpper();
                         }
                 }
             }
@@ -130,6 +130,7 @@ namespace WebApplication2
                     ticker.Value = "";
                     quote.Value = "";
                     tradeAmount.Value = "";
+                    Session["tradeAmount"] = "";
                 }
 
                 // store transaction
@@ -137,12 +138,13 @@ namespace WebApplication2
                 {
                     Transaction t = new Transaction(
                     0, currentUser.id, currentStock.ticker, type, transactionAmount, currentStock.currentPrice);
-                    if (conn.InsertTransaction(t) == 1 && conn.UpdateUserPortfolio(t, currentPortfolio) >= 1)
+                    if (conn.InsertTransaction(t) == 1 && conn.UpdateUserPortfolio(t, currentPortfolio) == 2)
                     {
                         Response.Write("<script>alert(\'Transaction successfully saved to the database.\')</script>");
                         ticker.Value = "";
                         quote.Value = "";
                         tradeAmount.Value = "";
+                        Session["tradeAmount"] = "";
                     }
                     else
                     {
@@ -160,6 +162,7 @@ namespace WebApplication2
             currentPortfolio = (Portfolio)Session["currentPortfolio"];
             conn = (MySqlConnection)Session["conn"];
             int transactionAmount = (int)Session["tradeAmount"];
+            tickerString = (String)Session["tickerString"];
             bool canSave = false;
             String type = "SELL";
 
@@ -187,6 +190,7 @@ namespace WebApplication2
                     ticker.Value = "";
                     quote.Value = "";
                     tradeAmount.Value = "";
+                    Session["tradeAmount"] = "";
                 }
 
                 // store transaction
@@ -200,6 +204,7 @@ namespace WebApplication2
                         ticker.Value = "";
                         quote.Value = "";
                         tradeAmount.Value = "";
+                        Session["tradeAmount"] = "";
                     }
                     else
                     {
