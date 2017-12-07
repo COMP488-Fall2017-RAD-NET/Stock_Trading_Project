@@ -22,16 +22,20 @@ namespace WebApplication2
         {
             /* 
              * Probably re-write the database interaction logic using Model
-             * /
-            
-            /*var entities = new stocktradingEntities();
-            IList<Models.Portfolio> portfolios = entities.Portfolios.ToList();
-            var filteredResult = from p in portfolios
-                                 where p.UserId == 1
-                                 select p;*/
+             */
 
+            /*var entities = new stocktradingEntities();
+                IList<Models.Portfolio> portfolios = entities.Portfolios.ToList();
+                var filteredResult = from p in portfolios
+                                     where p.UserId == 1
+                                     select p;
+
+                foreach (Models.Portfolio p in filteredResult.ToList())
+                {
+                }*/
+            
             if (!IsPostBack)
-            {
+            {    
                 if (!SetDatabaseConnection())
                 {
                     Response.Write("<script>alert(\'Database connection failed\')</script>");
@@ -42,9 +46,10 @@ namespace WebApplication2
                     Session["currentUser"] = currentUser;
 
                     currentPortfolio = conn.SelectUserPortfolio(currentUser);
+                    currentPortfolio.UpdateCurrentValue();
                     Session["currentPortfolio"] = currentPortfolio;
                 }
-            }
+        }
             else
             {
                 ticker.Value = (String) Session["tickerString"];
@@ -79,10 +84,22 @@ namespace WebApplication2
 
         }
 
+        // handle get quote button click event
         protected void GetQuote_Click(object sender, EventArgs e)
         {
             tickerString = (String)Session["tickerString"];
-            currentStock = new Stock(tickerString);
+            currentPortfolio = (Portfolio)Session["currentPortfolio"];
+            
+            // verify if there is a stock in current portfolio
+            if (currentPortfolio.stocks.ContainsKey(tickerString))
+            {
+                currentStock = currentPortfolio.GetStockFromList(tickerString);
+            }
+            else
+            {
+                currentStock = new Stock(tickerString);
+            }
+
             Session["currentStock"] = currentStock;
             double price = currentStock.currentPrice;
             Session["quote"] = price;
@@ -99,6 +116,7 @@ namespace WebApplication2
             }
         }
 
+        // handle submit amount button click event
         protected void SubmitAmount_Click(object sender, EventArgs e)
         {
             currentStock = (Stock)Session["currentStock"];
@@ -106,6 +124,7 @@ namespace WebApplication2
             amount.Value = (currentStock.currentPrice * transactionAmount).ToString();
         }
 
+        // handle buy button click event
         protected void Buy_Click(object sender, EventArgs e)
         {
             // retrieve references from current session
@@ -164,6 +183,7 @@ namespace WebApplication2
             }
         }
 
+        // handle sell button click event
         protected void Sell_Click(object sender, EventArgs e)
         {
             // retrieve references from current session

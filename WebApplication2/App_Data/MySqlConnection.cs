@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// A class to manage connection with a SQL server
+/// A class to manage the connection with the SQL server
 /// </summary>
 public class MySqlConnection
 {
@@ -44,6 +44,7 @@ public class MySqlConnection
         connection.Close();
     }
 
+    // handle arbitrary insert query
     public int InsertQuery(String sql)
     {
         //String sql = "insert into transactions values (1,'AAPL','BUY',100,98.54)";
@@ -51,6 +52,7 @@ public class MySqlConnection
         return command.ExecuteNonQuery();
     }
 
+    // select all transactions
     public List<Transaction> SelectTransactions()
     {
         List<Transaction> transactions = new List<Transaction>();
@@ -72,6 +74,7 @@ public class MySqlConnection
         return transactions;
     }
 
+    // insert a specific transaction
     public int InsertTransaction(Transaction t)
     {
         String sql = String.Format("insert into transactions values ({0})", t.ToString());
@@ -79,6 +82,7 @@ public class MySqlConnection
         return command.ExecuteNonQuery();
     }
 
+    // select a user by userid
     public User SelectUser(int userId)
     {
         User user = new User(userId);
@@ -97,6 +101,7 @@ public class MySqlConnection
         return user;
     }
 
+    // retrieve user's portfolio
     public Portfolio SelectUserPortfolio(User user)
     {
         Portfolio portfolio = new Portfolio(user);
@@ -120,6 +125,7 @@ public class MySqlConnection
         return portfolio;
     }
 
+    // update user's portfolio with a specific transaction
     public int UpdateUserPortfolio(Transaction t, Portfolio p)
     {
         int result = 0, pAmount = 0;

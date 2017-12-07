@@ -34,7 +34,7 @@ public class Stock
             {
                 price = (double)o.Properties().ElementAt(1).ElementAt(0).ElementAt(0).ElementAt(0)["4. close"];
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 price = 0.0;
             }
