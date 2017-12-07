@@ -34,6 +34,11 @@
             </fieldset>
         <!--</form>-->
     </div>
+    
+    <div style="width: 50%; float: right; padding-top: 10px; padding-bottom: 10px; font-size:20px">
+        <a href="/Portfolio/Index">Your Portfolio</a>
+    </div>
+    <!--
     <div style="width: 50%; float: right">
         <legend style="padding-top: 10px; padding-bottom: 10px">Your Portfolio</legend>
         <table class="table table-striped table-hover table-bordered">
@@ -85,7 +90,7 @@
             </tbody>
         </table>
     </div>
-
+    -->
     <script type="text/javascript">
         function saveTickerValue() {
             __doPostBack('callPostBack', document.getElementById("ticker").value);
