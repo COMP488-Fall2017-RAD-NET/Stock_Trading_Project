@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WebApplication2.Models;
 
 namespace WebApplication2
 {
@@ -19,6 +20,15 @@ namespace WebApplication2
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            /* 
+             * Probably re-write the database interaction logic using Model
+             * /
+            
+            /*var entities = new stocktradingEntities();
+            IList<Models.Portfolio> portfolios = entities.Portfolios.ToList();
+            var filteredResult = from p in portfolios
+                                 where p.UserId == 1
+                                 select p;*/
 
             if (!IsPostBack)
             {
