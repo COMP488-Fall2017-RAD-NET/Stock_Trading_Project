@@ -13,7 +13,11 @@ namespace WebApplication2.Controllers
         public ActionResult Index()
         {
             var entities = new stocktradingEntities();
-            return View(entities.Portfolios.ToList());
+            IList<Models.Portfolio> portfolios = entities.Portfolios.ToList();
+            var filteredResult = from p in portfolios
+                                 where p.UserId == 1 select p;
+
+            return View(filteredResult.ToList());
         }
     }
 }
