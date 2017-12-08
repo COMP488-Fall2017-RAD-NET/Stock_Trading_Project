@@ -48,6 +48,11 @@ namespace WebApplication2
                     currentPortfolio = conn.SelectUserPortfolio(currentUser);
                     currentPortfolio.UpdateCurrentValue();
                     Session["currentPortfolio"] = currentPortfolio;
+                    try
+                    {
+                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString();
+                    }
+                    catch { }
                 }
         }
             else
@@ -56,11 +61,8 @@ namespace WebApplication2
                 try
                 {
                     quote.Value = Session["quote"].ToString();
-                }
-                catch { }
-                try
-                {
                     tradeAmount.Value = Session["tradeAmount"].ToString();
+                    profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString();
                 }
                 catch { }
                
@@ -174,6 +176,8 @@ namespace WebApplication2
                         quote.Value = "";
                         tradeAmount.Value = "";
                         Session["tradeAmount"] = "";
+                        currentPortfolio.UpdateCurrentValue();
+                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString();
                     }
                     else
                     {
@@ -221,6 +225,8 @@ namespace WebApplication2
                     quote.Value = "";
                     tradeAmount.Value = "";
                     Session["tradeAmount"] = "";
+                    currentPortfolio.UpdateCurrentValue();
+                    profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString();
                 }
 
                 // store transaction

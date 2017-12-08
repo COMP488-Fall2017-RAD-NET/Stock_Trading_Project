@@ -19,6 +19,8 @@ public class Portfolio
         this.stocks = new Dictionary<string, int>();
         this.money = 10000.0;
         this.initialValue = money;
+        this.currentValue = 0.0;
+        this.stocksList = new List<Stock>();
     }
 
     public int GetUserId()

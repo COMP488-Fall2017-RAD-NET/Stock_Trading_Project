@@ -36,7 +36,12 @@
     </div>
     
     <div style="width: 50%; float: right; padding-top: 10px; padding-bottom: 10px; font-size:20px">
-        <a href="/Portfolio/Index">Your Portfolio</a>
+        <a href="/Portfolio/Index">Click here to review your Portfolio</a>
+    </div>
+
+    <div style="width: 50%; float: right; padding-top: 10px; padding-bottom: 10px; font-size:20px">
+        <label>Your Profit / Loss:</label>
+        <input id="profitloss" runat="server" type="number" class="form-control" readonly style="padding: 10px" />
     </div>
     <!--
     <div style="width: 50%; float: right">
