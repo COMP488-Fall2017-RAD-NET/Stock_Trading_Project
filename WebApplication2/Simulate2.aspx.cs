@@ -50,7 +50,7 @@ namespace WebApplication2
                     Session["currentPortfolio"] = currentPortfolio;
                     try
                     {
-                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString();
+                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                     }
                     catch { }
                 }
@@ -58,11 +58,14 @@ namespace WebApplication2
             else
             {
                 ticker.Value = (String) Session["tickerString"];
+                currentPortfolio = (Portfolio)Session["currentPortfolio"];
                 try
                 {
-                    quote.Value = Session["quote"].ToString();
-                    tradeAmount.Value = Session["tradeAmount"].ToString();
-                    profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString();
+                    double sessionQuote = (double) Session["quote"];
+                    quote.Value = sessionQuote.ToString("C2");
+                    int sessionTradeAmount = (int) Session["tradeAmount"];
+                    tradeAmount.Value = sessionTradeAmount.ToString("D");
+                    profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                 }
                 catch { }
                
@@ -109,7 +112,8 @@ namespace WebApplication2
             // render quote and update chart
             if (price != 0.0)
             {
-                quote.Value = price.ToString();
+                quote.Value = price.ToString("C2");
+                profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                 //UpdateChart(ticker.Value);
             }
             else
@@ -123,7 +127,7 @@ namespace WebApplication2
         {
             currentStock = (Stock)Session["currentStock"];
             int transactionAmount = (int) Session["tradeAmount"];
-            amount.Value = (currentStock.currentPrice * transactionAmount).ToString();
+            amount.Value = (currentStock.currentPrice * transactionAmount).ToString("F");
         }
 
         // handle buy button click event
@@ -177,7 +181,7 @@ namespace WebApplication2
                         tradeAmount.Value = "";
                         Session["tradeAmount"] = "";
                         currentPortfolio.UpdateCurrentValue();
-                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString();
+                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                     }
                     else
                     {
@@ -225,8 +229,6 @@ namespace WebApplication2
                     quote.Value = "";
                     tradeAmount.Value = "";
                     Session["tradeAmount"] = "";
-                    currentPortfolio.UpdateCurrentValue();
-                    profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString();
                 }
 
                 // store transaction
@@ -241,6 +243,8 @@ namespace WebApplication2
                         quote.Value = "";
                         tradeAmount.Value = "";
                         Session["tradeAmount"] = "";
+                        currentPortfolio.UpdateCurrentValue();
+                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                     }
                     else
                     {
