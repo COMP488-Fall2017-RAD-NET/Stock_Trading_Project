@@ -57,6 +57,7 @@ public class Portfolio
     public void UpdateCurrentValue()
     {
         stocksList.Clear();
+        currentValue = 0;
         foreach (String key in stocks.Keys)
         {
             int v;
