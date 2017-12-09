@@ -44,6 +44,7 @@
     <div style="width: 50%; float: right; padding-top: 10px; padding-bottom: 10px; font-size:20px">
         <label>Your Profit / Loss:</label>
         <input id="profitloss" runat="server" type="text" class="form-control" readonly style="padding: 10px" />
+        <asp:Button ID="profitlossUpdateButton" runat="server" Text="Update" OnClick="profitlossUpdateButton_Click" class="btn btn-primary" UseSubmitBehavior="false" />
     </div>
     <!--
     <div style="width: 50%; float: right">

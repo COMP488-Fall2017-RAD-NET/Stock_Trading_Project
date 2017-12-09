@@ -89,6 +89,20 @@ namespace WebApplication2
 
         }
 
+        // handle update profit/loss click event
+        protected void profitlossUpdateButton_Click(object sender, EventArgs e)
+        {
+            conn = (MySqlConnection)Session["conn"];
+            currentUser = (User)Session["currentUser"];
+            currentPortfolio = conn.SelectUserPortfolio(currentUser);
+            currentPortfolio.UpdateCurrentValue();
+            try
+            {
+                profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
+            }
+            catch { }
+        }
+
         // handle get quote button click event
         protected void GetQuote_Click(object sender, EventArgs e)
         {
