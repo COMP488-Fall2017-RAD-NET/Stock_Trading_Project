@@ -39,6 +39,8 @@
     
     <div style="width: 50%; float: right; padding-top: 10px; padding-bottom: 10px; font-size:20px">
         <a href="/Portfolio/Index">Click here to review your Portfolio</a>
+        <br />
+        <a href="/Transactions/Index">Click here to review your Transactions</a>
     </div>
 
     <div style="width: 50%; float: right; padding-top: 10px; padding-bottom: 10px; font-size:20px">
