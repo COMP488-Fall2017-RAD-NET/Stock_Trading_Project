@@ -10,13 +10,6 @@ namespace WebApplication2
         private MySqlConnection conn;
         private String tickerString;
 
-        // terminate database connection
-        protected void Page_UnLoad(object sender, EventArgs e)
-        {
-            conn = (MySqlConnection)Session["conn"];
-            conn.Disconnect();
-        }
-
         // handle page load event
         protected void Page_Load(object sender, EventArgs e)
         {
