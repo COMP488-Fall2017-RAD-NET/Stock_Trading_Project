@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// Summary description for User
+/// A User
 /// </summary>
 public class User
 {

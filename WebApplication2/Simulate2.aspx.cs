@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace WebApplication2
 {
     public partial class Simulate2 : System.Web.UI.Page
     {
-
-        //protected static WebBrowser webBrowser1;
         private Stock currentStock;
         private User currentUser;
         private Portfolio currentPortfolio;
         private MySqlConnection conn;
         private String tickerString;
 
+        // terminate database connection
+        protected void Page_UnLoad(object sender, EventArgs e)
+        {
+            conn = (MySqlConnection)Session["conn"];
+            conn.Disconnect();
+        }
+
+        // handle page load event
         protected void Page_Load(object sender, EventArgs e)
         {
-
             if (!IsPostBack)
-            {
+            {    
                 if (!SetDatabaseConnection())
                 {
                     Response.Write("<script>alert(\'Database connection failed\')</script>");
@@ -32,20 +32,26 @@ namespace WebApplication2
                     Session["currentUser"] = currentUser;
 
                     currentPortfolio = conn.SelectUserPortfolio(currentUser);
+                    currentPortfolio.UpdateCurrentValue();
                     Session["currentPortfolio"] = currentPortfolio;
+                    try
+                    {
+                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
+                    }
+                    catch { }
                 }
             }
             else
             {
                 ticker.Value = (String) Session["tickerString"];
+                currentPortfolio = (Portfolio)Session["currentPortfolio"];
                 try
                 {
-                    quote.Value = Session["quote"].ToString();
-                }
-                catch { }
-                try
-                {
-                    tradeAmount.Value = Session["tradeAmount"].ToString();
+                    double sessionQuote = (double) Session["quote"];
+                    quote.Value = sessionQuote.ToString("C2");
+                    int sessionTradeAmount = (int) Session["tradeAmount"];
+                    tradeAmount.Value = sessionTradeAmount.ToString("D");
+                    profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                 }
                 catch { }
                
@@ -69,10 +75,36 @@ namespace WebApplication2
 
         }
 
+        // handle update profit/loss click event
+        protected void profitlossUpdateButton_Click(object sender, EventArgs e)
+        {
+            conn = (MySqlConnection)Session["conn"];
+            currentUser = (User)Session["currentUser"];
+            currentPortfolio = conn.SelectUserPortfolio(currentUser);
+            currentPortfolio.UpdateCurrentValue();
+            try
+            {
+                profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
+            }
+            catch { }
+        }
+
+        // handle get quote button click event
         protected void GetQuote_Click(object sender, EventArgs e)
         {
             tickerString = (String)Session["tickerString"];
-            currentStock = new Stock(tickerString);
+            currentPortfolio = (Portfolio)Session["currentPortfolio"];
+            
+            // verify if there is a stock in current portfolio
+            if (currentPortfolio.stocks.ContainsKey(tickerString))
+            {
+                currentStock = currentPortfolio.GetStockFromList(tickerString);
+            }
+            else
+            {
+                currentStock = new Stock(tickerString);
+            }
+
             Session["currentStock"] = currentStock;
             double price = currentStock.currentPrice;
             Session["quote"] = price;
@@ -80,7 +112,8 @@ namespace WebApplication2
             // render quote and update chart
             if (price != 0.0)
             {
-                quote.Value = price.ToString();
+                quote.Value = price.ToString("C2");
+                profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                 //UpdateChart(ticker.Value);
             }
             else
@@ -89,13 +122,15 @@ namespace WebApplication2
             }
         }
 
+        // handle submit amount button click event
         protected void SubmitAmount_Click(object sender, EventArgs e)
         {
             currentStock = (Stock)Session["currentStock"];
             int transactionAmount = (int) Session["tradeAmount"];
-            amount.Value = (currentStock.currentPrice * transactionAmount).ToString();
+            amount.Value = (currentStock.currentPrice * transactionAmount).ToString("C2");
         }
 
+        // handle buy button click event
         protected void Buy_Click(object sender, EventArgs e)
         {
             // retrieve references from current session
@@ -106,8 +141,7 @@ namespace WebApplication2
             int transactionAmount = (int)Session["tradeAmount"];
             bool canSave = false;
             String type = "BUY";
-
-
+            
             // error handling
             if (currentStock == null || currentStock.currentPrice == 0.0)
             {
@@ -145,6 +179,8 @@ namespace WebApplication2
                         quote.Value = "";
                         tradeAmount.Value = "";
                         Session["tradeAmount"] = "";
+                        currentPortfolio.UpdateCurrentValue();
+                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                     }
                     else
                     {
@@ -154,6 +190,7 @@ namespace WebApplication2
             }
         }
 
+        // handle sell button click event
         protected void Sell_Click(object sender, EventArgs e)
         {
             // retrieve references from current session
@@ -205,6 +242,8 @@ namespace WebApplication2
                         quote.Value = "";
                         tradeAmount.Value = "";
                         Session["tradeAmount"] = "";
+                        currentPortfolio.UpdateCurrentValue();
+                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
                     }
                     else
                     {
@@ -228,23 +267,5 @@ namespace WebApplication2
                 return false;
             }
         }
-
-        // create web browser - not working yet
-        private static void CreateWebBrowser()
-        {
-            //webBrowser1 = new WebBrowser();
-        }
-
-        // update chart - not working yet
-        private void UpdateChart(String ticker)
-        {
-            /*String src = "\"https://s.tradingview.com/widgetembed/?symbol=" + ticker.Value + "&amp;interval=D&amp;symboledit=1&amp;saveimage=1&amp;toolbarbg=f1f3f6&amp;studies=%5B%5D&amp;hideideas=1&amp;theme=Light&amp;style=1&amp;timezone=Etc%2FUTC&amp;studies_overrides=%7B%7D&amp;overrides=%7B%7D&amp;enabled_features=%5B%5D&amp;disabled_features=%5B%5D&amp;locale=en&amp;utm_source=localhost&amp;utm_medium=widget&amp;utm_campaign=chart&amp;utm_term=" + ticker.Value + "\"";
-            Thread t = new Thread(new ThreadStart(CreateWebBrowser));
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-            webBrowser1.Document.GetElementsByTagName("iframe")[0].SetAttribute("src", src);
-            t.Abort();*/
-        }
-
     }
 }

@@ -22,6 +22,8 @@
                     <div style="padding-top: 10px; padding-bottom: 10px">
                         <label>How many shares would you like?</label>
                         <input id="tradeAmount" runat="server" type="text" class="form-control" placeholder="Enter share quantity here" style="padding: 10px" ClientIDMode="Static"/>
+                        <asp:CompareValidator ControlToValidate="tradeAmount" runat="server" ErrorMessage="Integers only please" Operator="DataTypeCheck" Type="Integer" ></asp:CompareValidator>
+                        <br />
                         <asp:Button ID="submitAmount" runat="server" Text="Submit" OnClick="SubmitAmount_Click" class="btn btn-primary" UseSubmitBehavior="false" OnClientClick="saveAmountValue()" />
                     </div>
                     <div style="padding-top: 5px; padding-bottom: 5px">
@@ -36,7 +38,15 @@
     </div>
     
     <div style="width: 50%; float: right; padding-top: 10px; padding-bottom: 10px; font-size:20px">
-        <a href="/Portfolio/Index">Your Portfolio</a>
+        <a href="/Portfolio/Index">Click here to review your Portfolio</a>
+        <br />
+        <a href="/Transactions/Index">Click here to review your Transactions</a>
+    </div>
+
+    <div style="width: 50%; float: right; padding-top: 10px; padding-bottom: 10px; font-size:20px">
+        <label>Your Profit / Loss:</label>
+        <input id="profitloss" runat="server" type="text" class="form-control" readonly style="padding: 10px" />
+        <asp:Button ID="profitlossUpdateButton" runat="server" Text="Update" OnClick="profitlossUpdateButton_Click" class="btn btn-primary" UseSubmitBehavior="false" />
     </div>
     <!--
     <div style="width: 50%; float: right">

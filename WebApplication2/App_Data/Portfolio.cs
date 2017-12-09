@@ -9,12 +9,18 @@ public class Portfolio
     public User user { get; private set; }
     public Dictionary<String, int> stocks { get; set; }
     public double money { get; set; }
+    public double initialValue { get; private set; }
+    public double currentValue { get; set; }
+    public IList<Stock> stocksList { get; set; }
 
     public Portfolio(User user)
     {
         this.user = user;
         this.stocks = new Dictionary<string, int>();
-        this.money = 0.0;
+        this.money = 1000000.0;
+        this.initialValue = money;
+        this.currentValue = 0.0;
+        this.stocksList = new List<Stock>();
     }
 
     public int GetUserId()
@@ -22,6 +28,7 @@ public class Portfolio
         return user.id;
     }
 
+    // retrieve number of stocks by ticker
     public int GetStock(String ticker)
     {
         int value;
@@ -46,6 +53,44 @@ public class Portfolio
         }
 
         return result;
+    }
+
+    // re-calculate current value
+    public void UpdateCurrentValue()
+    {
+        stocksList.Clear();
+        currentValue = 0;
+        foreach (String key in stocks.Keys)
+        {
+            int v;
+            if (stocks.TryGetValue(key, out v))
+            {
+                if (key != "MONEY")
+                {
+                    Stock s = new Stock(key);
+                    stocksList.Add(s);
+                    currentValue += v * s.currentPrice;
+                }
+                else
+                {
+                    currentValue += v;
+                }
+            }
+        }
+    }
+
+    // get a particular stock as Stock object
+    public Stock GetStockFromList(String ticker)
+    {
+        foreach (Stock s in stocksList)
+        {
+            if (s.ticker == ticker)
+            {
+                return s;
+            }
+        }
+
+        return null;
     }
 
 }

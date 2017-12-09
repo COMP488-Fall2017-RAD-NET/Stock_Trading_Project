@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// Summary description for Transaction
+/// A Transaction
 /// </summary>
 public class Transaction
 {
@@ -26,6 +26,7 @@ public class Transaction
         this.price = price;
     }
 
+    // needed for sql insert
     public override string ToString()
     {
         return String.Format("'{0}','{1}','{2}','{3}','{4}'", userId, ticker, type, amount, price);
