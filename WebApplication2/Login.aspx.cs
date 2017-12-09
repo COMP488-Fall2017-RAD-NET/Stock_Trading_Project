@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Xml;
+using System.Web.Security;
+
+
+namespace WebApplication2
+{
+    public partial class Login : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        protected void login_Click(object sender, EventArgs e)
+        {
+            if (Page.IsValid)
+            {
+
+                string username = Username.Text;
+                string password = Password.Text;
+                //Spassword = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5");
+
+        
+
+                MySqlConnection conn = new MySqlConnection();
+                conn.Connect();
+                string dpass = conn.MatchPassword(username);
+                int i = conn.ValidateUsername(username);
+
+
+                if (password != dpass)
+                {
+                    Label1.Text = "Invalid username or password";
+                }
+
+                else
+                {
+                    FormsAuthentication.RedirectFromLoginPage(username, CheckBox1.Checked);
+                }
+
+            }
+
+
+        }
+    }
+}
