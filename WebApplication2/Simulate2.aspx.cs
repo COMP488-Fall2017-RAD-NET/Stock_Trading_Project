@@ -127,7 +127,7 @@ namespace WebApplication2
         {
             currentStock = (Stock)Session["currentStock"];
             int transactionAmount = (int) Session["tradeAmount"];
-            amount.Value = (currentStock.currentPrice * transactionAmount).ToString("F");
+            amount.Value = (currentStock.currentPrice * transactionAmount).ToString("C2");
         }
 
         // handle buy button click event
