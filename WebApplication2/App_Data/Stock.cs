@@ -7,6 +7,7 @@ using System.Linq;
 /// </summary>
 public class Stock
 {
+    // working key
     private const String apiKey = "38HEIOY4TO9U5D4S";
     // extra key
     //private const String apiKey = "GA0OUDLQRC75F1Q1";
@@ -20,7 +21,7 @@ public class Stock
         this.currentPrice = FetchQuote();
     }
 
-    // helper method to fetch and render quotes from a remote API
+    // helper method to fetch quotes from a remote API
     public double FetchQuote()
     {
         // create url

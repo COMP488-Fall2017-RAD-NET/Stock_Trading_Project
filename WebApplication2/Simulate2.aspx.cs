@@ -1,39 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using WebApplication2.Models;
 
 namespace WebApplication2
 {
     public partial class Simulate2 : System.Web.UI.Page
     {
-
-        //protected static WebBrowser webBrowser1;
         private Stock currentStock;
         private User currentUser;
         private Portfolio currentPortfolio;
         private MySqlConnection conn;
         private String tickerString;
 
+        // terminate database connection
+        protected void Page_UnLoad(object sender, EventArgs e)
+        {
+            conn = (MySqlConnection)Session["conn"];
+            conn.Disconnect();
+        }
+
+        // handle page load event
         protected void Page_Load(object sender, EventArgs e)
         {
-            /* 
-             * Probably re-write the database interaction logic using Model
-             */
-
-            /*var entities = new stocktradingEntities();
-                IList<Models.Portfolio> portfolios = entities.Portfolios.ToList();
-                var filteredResult = from p in portfolios
-                                     where p.UserId == 1
-                                     select p;
-
-                foreach (Models.Portfolio p in filteredResult.ToList())
-                {
-                }*/
-            
             if (!IsPostBack)
             {    
                 if (!SetDatabaseConnection())
@@ -54,7 +40,7 @@ namespace WebApplication2
                     }
                     catch { }
                 }
-        }
+            }
             else
             {
                 ticker.Value = (String) Session["tickerString"];
@@ -155,8 +141,7 @@ namespace WebApplication2
             int transactionAmount = (int)Session["tradeAmount"];
             bool canSave = false;
             String type = "BUY";
-
-
+            
             // error handling
             if (currentStock == null || currentStock.currentPrice == 0.0)
             {
@@ -282,23 +267,5 @@ namespace WebApplication2
                 return false;
             }
         }
-
-        // create web browser - not working yet
-        private static void CreateWebBrowser()
-        {
-            //webBrowser1 = new WebBrowser();
-        }
-
-        // update chart - not working yet
-        private void UpdateChart(String ticker)
-        {
-            /*String src = "\"https://s.tradingview.com/widgetembed/?symbol=" + ticker.Value + "&amp;interval=D&amp;symboledit=1&amp;saveimage=1&amp;toolbarbg=f1f3f6&amp;studies=%5B%5D&amp;hideideas=1&amp;theme=Light&amp;style=1&amp;timezone=Etc%2FUTC&amp;studies_overrides=%7B%7D&amp;overrides=%7B%7D&amp;enabled_features=%5B%5D&amp;disabled_features=%5B%5D&amp;locale=en&amp;utm_source=localhost&amp;utm_medium=widget&amp;utm_campaign=chart&amp;utm_term=" + ticker.Value + "\"";
-            Thread t = new Thread(new ThreadStart(CreateWebBrowser));
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-            webBrowser1.Document.GetElementsByTagName("iframe")[0].SetAttribute("src", src);
-            t.Abort();*/
-        }
-
     }
 }

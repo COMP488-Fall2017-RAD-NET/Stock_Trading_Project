@@ -28,6 +28,7 @@ public class Portfolio
         return user.id;
     }
 
+    // retrieve number of stocks by ticker
     public int GetStock(String ticker)
     {
         int value;
@@ -54,6 +55,7 @@ public class Portfolio
         return result;
     }
 
+    // re-calculate current value
     public void UpdateCurrentValue()
     {
         stocksList.Clear();
@@ -77,6 +79,7 @@ public class Portfolio
         }
     }
 
+    // get a particular stock as Stock object
     public Stock GetStockFromList(String ticker)
     {
         foreach (Stock s in stocksList)
