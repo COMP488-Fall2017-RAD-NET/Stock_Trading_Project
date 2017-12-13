@@ -115,7 +115,7 @@
                     <asp:Button ID="Button2" runat="server" Text="Login" onclick="login_Click"/>
                    </td>
                <td>
-              <asp:CheckBox ID="CheckBox1" Text="Remeber Me" runat="server" />
+              <asp:CheckBox ID="CheckBox1" Text="Remember Me" runat="server" />
           </td>
                </tr>
                  </table>
