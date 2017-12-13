@@ -80,8 +80,8 @@
       </!--li-->
     </ul>
         
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px"><a href="/Default">Home</a>
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px"><a href="/Register">Register</a></button>
+      <asp:LinkButton runat="server" class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px" href="/Default">Home</asp:LinkButton>
+      <asp:LinkButton runat="server" class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px" href="/Register">Register</asp:LinkButton>
   </div>
 </nav>
  <h4>Welcome to log in page</h4>

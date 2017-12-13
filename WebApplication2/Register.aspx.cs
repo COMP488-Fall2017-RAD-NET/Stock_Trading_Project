@@ -40,7 +40,7 @@ namespace WebApplication2
 
                 if (i == -1)
                 {
-                    label = "Username is already exist. Please choose another one!";
+                    label = "Username already exists. Please choose another one!";
                 }
 
                 else
@@ -136,7 +136,7 @@ namespace WebApplication2
                 string rePassword = RePassowrd.Text;
                 if (password != rePassword)
                 {
-                    creatingInfo.Text = "Password dosn't match!";
+                    creatingInfo.Text = "Passwords don't match!";
                     validation = 0;
                     break;
                 }

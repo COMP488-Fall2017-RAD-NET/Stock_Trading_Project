@@ -75,13 +75,10 @@
       <li class="nav-item">
         <a class="nav-link" href="Contact.aspx">Stock Info</a>
       </li>
-      <!--li class="nav-item">
-        <a class="nav-link" href="Simulate2.aspx">SIMULATE NOW</a>
-      </!--li-->
     </ul>
       
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px"><a href="/Default">Home</a>
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px"><a href="/Login">Login</a></button>
+      <asp:LinkButton runat="server" class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px" href="/Default">Home</asp:LinkButton>
+      <asp:LinkButton runat="server" class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px" href="/Login">Login</asp:LinkButton>
   </div>
 </nav>
         <center>
@@ -92,7 +89,7 @@
         <div style="font-size:large; width:600px;float:left">
             <ul style="text-align:left">
             <li>
-                You need to create account for stock trading simulation. 
+                You need to create an account for stock trading simulation. 
             </li>
             <li>
                 You can only use letters and numbers for your username. 
