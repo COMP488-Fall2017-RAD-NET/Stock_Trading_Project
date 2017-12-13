@@ -178,8 +178,10 @@ public class MySqlConnection
         command = new SqlCommand(sql, connection);
         reader = command.ExecuteReader();
 
+        bool newPort = true;
         while (reader.Read())
         {
+            newPort = false;
             String ticker = reader.GetValue(0).ToString().TrimEnd();
             if (ticker == "MONEY")
             {
@@ -190,8 +192,20 @@ public class MySqlConnection
                 portfolio.stocks.Add(ticker, Convert.ToInt32(reader.GetValue(1)));
             }
         }
-        reader.Close();
-        return portfolio;
+        if (newPort)
+        {
+            reader.Close();
+            sql = String.Format("insert into Portfolio values('{0}','{1}','{2}')",
+                        portfolio.GetUserId(), "MONEY", portfolio.money);
+            InsertQuery(sql);
+            return portfolio;
+        }
+        else
+        {
+            reader.Close();
+            return portfolio;
+        }
+
     }
 
     // update user's portfolio with a specific transaction
