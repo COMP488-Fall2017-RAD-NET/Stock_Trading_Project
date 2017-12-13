@@ -101,6 +101,25 @@ public class MySqlConnection
         return user;
     }
 
+    // select userid by username
+    public int SelectUserid(string username)
+    {
+        int id;
+        String sql = String.Format("select Id from Users u where u.Username = '{0}'", username);
+        command = new SqlCommand(sql, connection);
+        reader = command.ExecuteReader();
+        if (reader.Read())
+        {
+            id = Convert.ToInt32(reader.GetValue(0));
+        }
+        else
+        {
+            id = -1;
+        }
+        reader.Close();
+        return id;
+    }
+
 
     public int ValidateUsername(string s)
     {

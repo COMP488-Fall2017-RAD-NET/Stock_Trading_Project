@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace WebApplication2
 {
@@ -13,6 +14,7 @@ namespace WebApplication2
         // handle page load event
         protected void Page_Load(object sender, EventArgs e)
         {
+            bool auth = HttpContext.Current.User.Identity.IsAuthenticated;
             if (!IsPostBack)
             {    
                 if (!SetDatabaseConnection())
@@ -21,7 +23,7 @@ namespace WebApplication2
                 }
                 else
                 {
-                    currentUser = conn.SelectUser(1);
+                    currentUser = conn.SelectUser(conn.SelectUserid(HttpContext.Current.User.Identity.Name));
                     Session["currentUser"] = currentUser;
 
                     currentPortfolio = conn.SelectUserPortfolio(currentUser);
