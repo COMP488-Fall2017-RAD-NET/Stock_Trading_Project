@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Web;
 
 namespace WebApplication2
@@ -14,8 +15,11 @@ namespace WebApplication2
         // handle page load event
         protected void Page_Load(object sender, EventArgs e)
         {
-            bool auth = HttpContext.Current.User.Identity.IsAuthenticated;
-            if (!IsPostBack)
+            if (!HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("/", true);
+            }
+            else if (!IsPostBack && HttpContext.Current.User.Identity.IsAuthenticated)
             {    
                 if (!SetDatabaseConnection())
                 {
@@ -36,7 +40,7 @@ namespace WebApplication2
                     catch { }
                 }
             }
-            else
+            else if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
                 ticker.Value = (String) Session["tickerString"];
                 currentPortfolio = (Portfolio)Session["currentPortfolio"];

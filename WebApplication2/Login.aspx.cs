@@ -6,7 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
 using System.Web.Security;
-
+using Microsoft.AspNet.Identity;
 
 namespace WebApplication2
 {
@@ -23,32 +23,40 @@ namespace WebApplication2
         {
             if (Page.IsValid)
             {
-
                 string username = Username.Text;
                 string password = Password.Text;
                 //Spassword = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5");
-
-        
-
+                
                 MySqlConnection conn = new MySqlConnection();
-                conn.Connect();
-                string dpass = conn.MatchPassword(username);
-                int i = conn.ValidateUsername(username);
+                PasswordHasher hasher = new PasswordHasher();
 
-
-                if (password != dpass)
+                if (conn.Connect())
                 {
-                    Label1.Text = "Invalid username or password";
-                }
+                    if (!conn.ValidateUsername(username))
+                    {
+                        Label1.Text = "Invalid username";
+                    }
+                    else
+                    {
+                        string dpass = conn.MatchPassword(username);
+                        PasswordVerificationResult result = hasher.VerifyHashedPassword(dpass, password);
 
+                        if (result == PasswordVerificationResult.Failed)
+                        {
+                            Label1.Text = "Invalid password";
+                        }
+
+                        else
+                        {
+                            FormsAuthentication.RedirectFromLoginPage(username, CheckBox1.Checked);
+                        }
+                    }
+                }
                 else
                 {
-                    FormsAuthentication.RedirectFromLoginPage(username, CheckBox1.Checked);
+                    Response.Write("<script>alert(\'Database connection failed\')</script>");
                 }
-
             }
-
-
         }
     }
 }

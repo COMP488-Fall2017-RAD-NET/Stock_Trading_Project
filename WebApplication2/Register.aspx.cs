@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -33,20 +35,24 @@ namespace WebApplication2
             else
             {
                 MySqlConnection conn = new MySqlConnection();
-                conn.Connect();
-
-                int i = conn.ValidateUsername(s);
-                conn.Disconnect();
-
-                if (i == -1)
+                if (conn.Connect())
                 {
-                    label = "Username already exists. Please choose another one!";
-                }
+                    if (conn.ValidateUsername(s))
+                    {
+                        label = "Username already exists. Please choose another one!";
+                    }
 
+                    else
+                    {
+                        label = "You can use this username.";
+                    }
+                    conn.Disconnect();
+                }
                 else
                 {
-                    label = "You can use this username.";
+                    Response.Write("<script>alert(\'Database connection failed\')</script>");
                 }
+
             }
 
             return label;
@@ -118,7 +124,7 @@ namespace WebApplication2
                 }
 
 
-                string password = Password.Text;
+                String password = Password.Text;
                 label = PasswordValidation(password);
                 if (label == "OK")
                 {
@@ -144,24 +150,28 @@ namespace WebApplication2
                 if (validation == 1)
                 {
                     //password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5");
+                    PasswordHasher hasher = new PasswordHasher();
+                    String hashedPassword = hasher.HashPassword(password);
+
                     MySqlConnection conn = new MySqlConnection();
-                    conn.Connect();
 
+                    if (conn.Connect())
+                    {
+                        User user = new User(0);
+                        user.firstName = FName.Text;
+                        user.username = username;
+                        user.lastName = LName.Text;
+                        user.password = hashedPassword;
+                        user.email = Email.Text;
 
-                    User user = new User(0);
-                    user.firstName = FName.Text;
-                    user.username = username;
-                    user.lastName = LName.Text;
-                    user.password = password;
-                    user.email = Email.Text;
-
-                    conn.InsertUser(user);
-
-
-
-
-
-                    Server.Transfer("Login.aspx", true);
+                        conn.InsertUser(user);
+                        conn.Disconnect();
+                        Server.Transfer("Login.aspx", true);
+                    }
+                    else
+                    {
+                        Response.Write("<script>alert(\'Database connection failed\')</script>");
+                    }
                 }
             }
         }

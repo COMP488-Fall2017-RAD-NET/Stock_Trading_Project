@@ -39,7 +39,10 @@ public class MySqlConnection
     // housekeeping
     public void Disconnect()
     {
-        reader.Close();
+        if (reader != null)
+        {
+            reader.Close();
+        }
         command.Dispose();
         connection.Close();
     }
@@ -121,23 +124,14 @@ public class MySqlConnection
     }
 
 
-    public int ValidateUsername(string s)
+    public bool ValidateUsername(string s)
     {
-        int i = 0;
         String sql = String.Format("select * from Users u where u.Username = '{0}'", s);
         command = new SqlCommand(sql, connection);
         reader = command.ExecuteReader();
-        if (reader.Read())
-        {
-            i = -1;
-        }
-        else
-        {
-            i = 1;
-        }
-
+        bool result = reader.HasRows;
         reader.Close();
-        return i;
+        return result;
     }
 
 
@@ -161,7 +155,6 @@ public class MySqlConnection
         if (reader.Read())
         {
             password = reader.GetValue(5).ToString().TrimEnd();
-
         }
         reader.Close();
         return password;
