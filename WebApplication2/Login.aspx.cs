@@ -48,6 +48,7 @@ namespace WebApplication2
 
                         else
                         {
+                            Session["authenticated"] = true;
                             FormsAuthentication.RedirectFromLoginPage(username, CheckBox1.Checked);
                         }
                     }
