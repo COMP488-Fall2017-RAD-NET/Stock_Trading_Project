@@ -1,5 +1,7 @@
 ﻿using System;
-
+using System.Security.Principal;
+using System.Web;
+using System.Web.Security;
 
 namespace WebApplication2
 {
@@ -7,7 +9,9 @@ namespace WebApplication2
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            FormsAuthentication.SignOut();
+            HttpContext.Current.User =
+                new GenericPrincipal(new GenericIdentity(string.Empty), null);
         }
     }
 }

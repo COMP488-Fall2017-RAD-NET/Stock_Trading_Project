@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="WebApplication2.SiteMaster" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="WebApplication2.Login" %>
 
 <!DOCTYPE html>
 
@@ -79,21 +79,65 @@
         <a class="nav-link" href="Simulate2.aspx">SIMULATE NOW</a>
       </!--li-->
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <asp:LinkButton runat="server" class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px" href="/Login">Login</asp:LinkButton>
+        
+      <asp:LinkButton runat="server" class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px" href="/Default">Home</asp:LinkButton>
       <asp:LinkButton runat="server" class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px" href="/Register">Register</asp:LinkButton>
-      <asp:LinkButton runat="server" class="btn btn-secondary my-2 my-sm-0" type="submit" style="width:100px" OnClick="logout_button_Click">Logout</asp:LinkButton>
-    </form>
   </div>
 </nav>
+ <h4>Welcome to log in page</h4>
+        <center>
+                    
+        <div>
+            </br></br>
 
-        <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
-            <hr />
+             <table id="table1">
+
+                <tr>
+                     <td style="text-align:right"><b>Username</b></td>
+                    <td>
+                        <asp:textbox id="Username" runat="server" Text=""></asp:textbox>
+ 
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td style="text-align:right"><b>Password</b></td>
+                    <td>
+                        <asp:textbox id="Password" runat="server" Text="" TextMode="Password"></asp:textbox>
+
+                    </td>
+                </tr>
+
+     
+           <tr>
+               <td>
+                    <asp:Button ID="Button2" runat="server" Text="Login" onclick="login_Click"/>
+                   </td>
+               <td>
+              <asp:CheckBox ID="CheckBox1" Text="Remember Me" runat="server" />
+          </td>
+               </tr>
+                 </table>
+                
+                   </div>
+
+
+        <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+
+      
+
+
+
+        <br />
+            
+        <br />
            
-        </div>
+        <br />
 
+            </center>
+    </form>
     </form>
 </body>
 </html>
+

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Web;
 
 namespace WebApplication2
 {
@@ -9,36 +11,43 @@ namespace WebApplication2
         private Portfolio currentPortfolio;
         private MySqlConnection conn;
         private String tickerString;
-
-        // terminate database connection
-        protected void Page_UnLoad(object sender, EventArgs e)
-        {
-            conn = (MySqlConnection)Session["conn"];
-            conn.Disconnect();
-        }
+        private bool authenticated = false;
 
         // handle page load event
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
-            {    
-                if (!SetDatabaseConnection())
+            {
+                try
                 {
-                    Response.Write("<script>alert(\'Database connection failed\')</script>");
+                    authenticated = (bool)Session["authenticated"];
+                }
+                catch { }
+
+                if (authenticated)
+                {
+                    if (!SetDatabaseConnection())
+                    {
+                        Response.Write("<script>alert(\'Database connection failed\')</script>");
+                    }
+                    else
+                    {
+                        currentUser = conn.SelectUser(conn.SelectUserid(HttpContext.Current.User.Identity.Name));
+                        Session["currentUser"] = currentUser;
+
+                        currentPortfolio = conn.SelectUserPortfolio(currentUser);
+                        currentPortfolio.UpdateCurrentValue();
+                        Session["currentPortfolio"] = currentPortfolio;
+                        try
+                        {
+                            profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
+                        }
+                        catch { }
+                    }
                 }
                 else
                 {
-                    currentUser = conn.SelectUser(1);
-                    Session["currentUser"] = currentUser;
-
-                    currentPortfolio = conn.SelectUserPortfolio(currentUser);
-                    currentPortfolio.UpdateCurrentValue();
-                    Session["currentPortfolio"] = currentPortfolio;
-                    try
-                    {
-                        profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
-                    }
-                    catch { }
+                    Response.Redirect("/", true);
                 }
             }
             else
@@ -114,7 +123,6 @@ namespace WebApplication2
             {
                 quote.Value = price.ToString("C2");
                 profitloss.Value = (currentPortfolio.currentValue - currentPortfolio.initialValue).ToString("C2");
-                //UpdateChart(ticker.Value);
             }
             else
             {

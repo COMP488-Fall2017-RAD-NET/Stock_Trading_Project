@@ -12,10 +12,12 @@ namespace WebApplication2.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
+            User currentUser = (User)Session["currentUser"];
+            int currentUserId = currentUser.id;
             var entities = new stocktradingEntities();
             IList<Models.Transaction> transactions = entities.Transactions.ToList();
             var filteredResult = from t in transactions
-                                 where t.UserId == 1
+                                 where t.UserId == currentUserId
                                  select t;
 
             return View(filteredResult.ToList());

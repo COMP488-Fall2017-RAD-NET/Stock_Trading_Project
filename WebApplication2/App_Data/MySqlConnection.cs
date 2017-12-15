@@ -39,7 +39,10 @@ public class MySqlConnection
     // housekeeping
     public void Disconnect()
     {
-        reader.Close();
+        if (reader != null)
+        {
+            reader.Close();
+        }
         command.Dispose();
         connection.Close();
     }
@@ -101,6 +104,65 @@ public class MySqlConnection
         return user;
     }
 
+    // select userid by username
+    public int SelectUserid(string username)
+    {
+        int id;
+        String sql = String.Format("select Id from Users u where u.Username = '{0}'", username);
+        command = new SqlCommand(sql, connection);
+        reader = command.ExecuteReader();
+        if (reader.Read())
+        {
+            id = Convert.ToInt32(reader.GetValue(0));
+        }
+        else
+        {
+            id = -1;
+        }
+        reader.Close();
+        return id;
+    }
+
+
+    public bool ValidateUsername(string s)
+    {
+        String sql = String.Format("select * from Users u where u.Username = '{0}'", s);
+        command = new SqlCommand(sql, connection);
+        reader = command.ExecuteReader();
+        bool result = reader.HasRows;
+        reader.Close();
+        return result;
+    }
+
+
+    public int InsertUser(User user)
+    {
+        String sql = String.Format("insert into users (Username,FirstName, LastName, Email,Password) values ('{0}','{1}','{2}','{3}','{4}')", user.username, user.firstName, user.lastName, user.email, user.password);
+        command = new SqlCommand(sql, connection);
+        int n = command.ExecuteNonQuery();
+        connection.Close();
+        return n;
+
+    }
+
+
+    public string MatchPassword(string username)
+    {
+        String sql = String.Format("select * from Users u where u.Username = '{0}'", username);
+        command = new SqlCommand(sql, connection);
+        reader = command.ExecuteReader();
+        string password = "";
+        if (reader.Read())
+        {
+            password = reader.GetValue(5).ToString().TrimEnd();
+        }
+        reader.Close();
+        return password;
+    }
+
+
+
+
     // retrieve user's portfolio
     public Portfolio SelectUserPortfolio(User user)
     {
@@ -109,8 +171,10 @@ public class MySqlConnection
         command = new SqlCommand(sql, connection);
         reader = command.ExecuteReader();
 
+        bool newPort = true;
         while (reader.Read())
         {
+            newPort = false;
             String ticker = reader.GetValue(0).ToString().TrimEnd();
             if (ticker == "MONEY")
             {
@@ -121,8 +185,20 @@ public class MySqlConnection
                 portfolio.stocks.Add(ticker, Convert.ToInt32(reader.GetValue(1)));
             }
         }
-        reader.Close();
-        return portfolio;
+        if (newPort)
+        {
+            reader.Close();
+            sql = String.Format("insert into Portfolio values('{0}','{1}','{2}')",
+                        portfolio.GetUserId(), "MONEY", portfolio.money);
+            InsertQuery(sql);
+            return portfolio;
+        }
+        else
+        {
+            reader.Close();
+            return portfolio;
+        }
+
     }
 
     // update user's portfolio with a specific transaction

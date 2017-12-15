@@ -59,22 +59,15 @@ public class Portfolio
     public void UpdateCurrentValue()
     {
         stocksList.Clear();
-        currentValue = 0;
+        currentValue = money;
         foreach (String key in stocks.Keys)
         {
             int v;
             if (stocks.TryGetValue(key, out v))
             {
-                if (key != "MONEY")
-                {
-                    Stock s = new Stock(key);
-                    stocksList.Add(s);
-                    currentValue += v * s.currentPrice;
-                }
-                else
-                {
-                    currentValue += v;
-                }
+                Stock s = new Stock(key);
+                stocksList.Add(s);
+                currentValue += v * s.currentPrice;
             }
         }
     }
