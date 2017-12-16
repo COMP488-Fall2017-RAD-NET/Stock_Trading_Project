@@ -103,16 +103,20 @@ namespace WebApplication2
         {
             tickerString = (String)Session["tickerString"];
             currentPortfolio = (Portfolio)Session["currentPortfolio"];
-            
+
             // verify if there is a stock in current portfolio
-            if (currentPortfolio.stocks.ContainsKey(tickerString))
+            try
             {
-                currentStock = currentPortfolio.GetStockFromList(tickerString);
+                if (currentPortfolio.stocks.ContainsKey(tickerString))
+                {
+                    currentStock = currentPortfolio.GetStockFromList(tickerString);
+                }
+                else
+                {
+                    currentStock = new Stock(tickerString);
+                }
             }
-            else
-            {
-                currentStock = new Stock(tickerString);
-            }
+            catch { }
 
             Session["currentStock"] = currentStock;
             double price = currentStock.currentPrice;
